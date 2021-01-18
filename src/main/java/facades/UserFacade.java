@@ -1,5 +1,7 @@
 package facades;
 
+import dto.UserDTO;
+import dto.UsersDTO;
 import entities.Role;
 
 import entities.User;
@@ -80,7 +82,17 @@ public class UserFacade {
         
     }
 
-
+    public List<UserDTO> getUsers(){
+         EntityManager em = emf.createEntityManager();
+          try {
+        List<User> Users = em.createQuery("Select u from User u" , User.class).getResultList();
+        return new UsersDTO(Users).getAll();
+          } 
+          finally{
+          em.close();
+          }
+    
+    }
 
 
 }

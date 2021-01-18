@@ -6,62 +6,26 @@
 package entities;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
  *
  * @author Benjamin
  */
 @Entity
-public class UserInfo implements Serializable {
+public class CityInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private int age;
-    private double weight;
-     @OneToOne(mappedBy = "UserInfo")
-     User user; 
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-  
-
-    public UserInfo() {
-    }
-
-    public UserInfo(String name, int age, double weight) {
-        this.name = name;
-        this.age = age;
-        this.weight = weight;
-      
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-    
-    
-    
-    
-    
+    private String primærtnavn;
+    private String sae;
+    private String municipality;
+    private int population;
     
     public Long getId() {
         return id;
@@ -81,10 +45,10 @@ public class UserInfo implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UserInfo)) {
+        if (!(object instanceof CityInfo)) {
             return false;
         }
-        UserInfo other = (UserInfo) object;
+        CityInfo other = (CityInfo) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -93,7 +57,7 @@ public class UserInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.UserInfo[ id=" + id + " ]";
+        return "entities.CityInfo[ id=" + id + " ]";
     }
     
 }

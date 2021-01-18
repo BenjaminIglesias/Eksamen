@@ -9,11 +9,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.PersonDTO;
 import entities.User;
+import errorhandling.ErrorRetrieving;
 import facades.FacadeExample;
 
 import facades.UserFacade;
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -32,6 +35,17 @@ public class UserRessource {
     private static final FacadeExample FACADE =  FacadeExample.getFacadeExample(EMF);
    private static final UserFacade userFacade =  UserFacade.getUserFacade(EMF);
  
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("user")
+    @Path("getAll")
+    public String getAllPersons() throws ErrorRetrieving {
+      
+      return GSON.toJson( userFacade.getUsers());    
+      
+      
+    }
+
    
        @POST
     @Path("add")

@@ -7,6 +7,7 @@ package facades;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.CityInfoDTO;
 import dto.characterDTO;
 import dto.filmDTO;
 import dto.combinedDTO;
@@ -22,6 +23,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import javax.persistence.EntityManagerFactory;
 import utils.HttpUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -150,4 +154,14 @@ public class RemoteServerFacade {
          
          return allCharacters;    
      }
+
+    private CityInfoDTO getCityInfo(String name) throws JSONException, IOException{
+     String json = HttpUtils.fetchData("https://dawa.aws.dk/steder?hovedtype=Bebyggelse&undertype=by&prim%C3%A6rtnavn=" + name);
+             JSONObject obj = new JSONObject(json);
+
+     
+     return null;
+    }
+
+
 }

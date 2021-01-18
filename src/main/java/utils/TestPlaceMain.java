@@ -8,9 +8,11 @@ package utils;
 import errorhandling.ErrorRetrieving;
 import facades.FetchFacade;
 import facades.PersonFacade;
+import facades.UserFacade;
 import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import org.json.JSONException;
 import rest.PersonRessource;
 import rest.UserRessource;
 import security.errorhandling.AuthenticationException;
@@ -20,20 +22,21 @@ import security.errorhandling.AuthenticationException;
  * @author Benjamin
  */
 public class TestPlaceMain {
-    public static void main(String[] args) throws ErrorRetrieving, IOException, AuthenticationException {
+    public static void main(String[] args) throws ErrorRetrieving, IOException, AuthenticationException, JSONException {
          EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
       PersonFacade pf =  PersonFacade.getPersonFacade(emf);
- 
-        UserRessource pr = new  UserRessource(); 
+      UserFacade uf = UserFacade.getUserFacade(emf);
+      UserRessource pr = new  UserRessource(); 
         
         ;
           String payload = "{\n" +
         "  \"username\": \"firstName\",\n" +
         "  \"userpass\": \"1234\",\n" +
         "}";
-   
-        System.out.println(pr.addPerson(payload));
+      FetchFacade ff = FetchFacade.getFetchFacade(emf);
+        System.out.println( ff.getWeatherInfo("Roskilde").toString());
+     
     }}
    
      
