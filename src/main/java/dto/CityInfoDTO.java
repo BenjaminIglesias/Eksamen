@@ -5,6 +5,8 @@
  */
 package dto;
 
+import entities.CityInfo;
+
 /**
  *
  * @author Benjamin
@@ -15,11 +17,11 @@ public class CityInfoDTO {
     private String municipality;
     private String population;
 
-    public CityInfoDTO(String name, String geocoordinates, String municipality, String population) {
-        this.name = name;
-        this.geocoordinates = geocoordinates;
-        this.municipality = municipality;
-        this.population = population;
+    public CityInfoDTO(CityInfo cityInfo) {
+        this.name = cityInfo.getName();
+        this.geocoordinates = cityInfo.getGeocoordinates();
+        this.municipality = cityInfo.getMunicipality();
+        this.population = cityInfo.getPopulation();
     }
 
     public CityInfoDTO() {
@@ -55,11 +57,6 @@ public class CityInfoDTO {
 
     public void setPopulation(String population) {
         this.population = population;
-    }
-
-    @Override
-    public String toString() {
-        return "CityInfoDTO{" + "name=" + name + ", geocoordinates=" + geocoordinates + ", municipality=" + municipality + ", population=" + population + '}';
     }
     
          

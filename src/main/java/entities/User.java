@@ -42,6 +42,10 @@ public class User implements Serializable {
    UserInfo userInfo;
    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Activity> activities = new ArrayList<>(); 
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
    
       
     public void addActivity(Activity activity){

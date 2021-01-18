@@ -5,6 +5,8 @@
  */
 package dto;
 
+import entities.WeatherInfo;
+
 /**
  *
  * @author Benjamin
@@ -15,11 +17,11 @@ public class WeatherInfoDTO {
    private String humidity;
    private String windText;
 
-    public WeatherInfoDTO(String temperature, String skyText, String humidity, String windText) {
-        this.temperature = temperature;
-        this.skyText = skyText;
-        this.humidity = humidity;
-        this.windText = windText;
+    public WeatherInfoDTO(WeatherInfo weatherInfo) {
+        this.temperature = weatherInfo.getTemperature();
+        this.skyText = weatherInfo.getSkyText();
+        this.humidity = weatherInfo.getHumidity();
+        this.windText = weatherInfo.getWindText();
     }
 
     public WeatherInfoDTO() {

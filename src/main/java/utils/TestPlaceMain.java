@@ -5,14 +5,20 @@
  */
 package utils;
 
+import entities.Activity;
+import entities.CityInfo;
+import entities.User;
 import errorhandling.ErrorRetrieving;
+import facades.ActivityFacade;
 import facades.FetchFacade;
 import facades.PersonFacade;
 import facades.UserFacade;
 import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.RollbackException;
 import org.json.JSONException;
+import rest.ActivityRessource;
 import rest.PersonRessource;
 import rest.UserRessource;
 import security.errorhandling.AuthenticationException;
@@ -35,8 +41,12 @@ public class TestPlaceMain {
         "  \"userpass\": \"1234\",\n" +
         "}";
       FetchFacade ff = FetchFacade.getFetchFacade(emf);
-        System.out.println( ff.getWeatherInfo("Roskilde").toString());
-     
+    
+     ActivityFacade af = ActivityFacade.getActivityFacade(emf);
+        System.out.println(af.getActivities("bobby"));
+     ActivityRessource ar = new ActivityRessource();
+        System.out.println(ar.getAllPersons("bobby"));
+
     }}
    
      

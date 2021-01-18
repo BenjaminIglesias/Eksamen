@@ -73,7 +73,7 @@ public class UserFacade {
             throw new AuthenticationException("User already exist. Try another username"+ e.getMessage());
             
         } catch (Exception e){
-              throw new AuthenticationException("Something went wrong. Server may be unavailable at the moment");
+            System.out.println(e);              
         } finally {
             em.close();
         }

@@ -5,17 +5,21 @@
  */
 package entities;
 
+import dto.CityInfoDTO;
+import dto.WeatherInfoDTO;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -39,7 +43,16 @@ public class Activity implements Serializable {
     
      @ManyToOne()
      User user; 
-
+     
+     @OneToOne(cascade = CascadeType.ALL)
+     private WeatherInfo weatherInfo;
+     @ManyToOne
+     CityInfo cityInfo; 
+     
+     
+     
+     
+     
     public Activity() {
     }
 
@@ -52,11 +65,63 @@ public class Activity implements Serializable {
         this.timeOfDay = timeOfDay.now(ZoneId.of("GMT+01:00"));
     }
 
+    public CityInfo getCityInfo() {
+        return cityInfo;
+    }
+
+    public void setCityInfo(CityInfo cityInfo) {
+        this.cityInfo = cityInfo;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+    public String getExerciseType() {
+        return exerciseType;
+    }
+
+    public LocalTime getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public WeatherInfo getWeatherInfo() {
+        return weatherInfo;
+    }
+
+   
+
      
+   
      
-     
-     
-     
+     public void setWeatherInfo(WeatherInfoDTO weatherInfoDTO) {
+         WeatherInfo wi = new WeatherInfo(weatherInfoDTO);
+         this.weatherInfo = wi;
+        if(wi != null){
+        wi.setActivity(this);
+        }
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -71,29 +136,5 @@ public class Activity implements Serializable {
         this.id = id;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Activity)) {
-            return false;
-        }
-        Activity other = (Activity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entities.Activity[ id=" + id + " ]";
-    }
-    
 }
