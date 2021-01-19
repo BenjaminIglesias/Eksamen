@@ -33,7 +33,7 @@ public class TestPlaceMain {
     EntityManager em = emf.createEntityManager();
       UserFacade uf = UserFacade.getUserFacade(emf);
       UserRessource pr = new  UserRessource(); 
-        
+      
         ;
           String payload = "{\n" +
         "  \"username\": \"firstName\",\n" +
