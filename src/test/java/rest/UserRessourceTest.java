@@ -1,12 +1,6 @@
-package rest;
-
-import entities.Address;
-import entities.Person;
-import entities.PhoneNumber;
-import entities.RenameMe;
 import entities.Role;
 import entities.User;
-import utils.EMF_Creator;
+
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
@@ -21,31 +15,25 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-//Uncomment the line below, to temporarily disable this test
-//@Disabled
+import rest.ApplicationConfig;
+import utils.EMF_Creator;
 
-public class PersonRessourceTest {
+@Disabled
+public class UserRessourceTest {
 
     private static final int SERVER_PORT = 7777;
-    private static final String SERVER_URL = "http://localhost/jpareststarter/api";
-    private static Person p1, p2;
-    private static Address a1;
+    private static final String SERVER_URL = "http://localhost/api";
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
-    private static String payload = "{\n" +
-        "  \"firstName\": \"firstName\",\n" +
-        "  \"lastName\": \"lastName\",\n" +
-        "  \"birthyear\": \"1990\"\n" +
-        "}";
+    
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -66,10 +54,9 @@ public class PersonRessourceTest {
 
     @AfterAll
     public static void closeTestServer() {
-        //System.in.read();
-
         //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
+        
         httpServer.shutdownNow();
     }
 
@@ -78,75 +65,72 @@ public class PersonRessourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        a1 = new Address("Vej","By");
-        PhoneNumber ph1 = new PhoneNumber("123","hjem");
-        
-        p1 = new Person("Hans","Hansen","1995",a1);
-        p1.addPhoneNumber(ph1);
-        
-       
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-           
-            em.getTransaction().commit();
-              em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
-            em.createQuery("delete from Person").executeUpdate();
-            em.createQuery("delete from Address").executeUpdate();
-            em.createQuery("delete from PhoneNumber").executeUpdate();
-            em.createQuery("delete from Book").executeUpdate();
-           
-            em.persist(p1);
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
+
+            Role userRole = new Role("user");
+            Role adminRole = new Role("admin");
+            User user = new User("user", "test");
+            user.addRole(userRole);
+            User admin = new User("admin", "test");
+            admin.addRole(adminRole);
+            User both = new User("user_admin", "test");
+            both.addRole(userRole);
+            both.addRole(adminRole);
+            em.persist(userRole);
+            em.persist(adminRole);
+            em.persist(user);
+            em.persist(admin);
+            em.persist(both);
+            //System.out.println("Saved test data to database");
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
 
-     @Test
-    public void testPerson() throws Exception {  
-            
-        given()
+    //This is how we hold on to the token after login, similar to that a client must store the token somewhere
+    private static String securityToken;
+
+    //Utility method to login and set the returned securityToken
+    private static void login(String role, String password) {
+        String json = String.format("{username: \"%s\", password: \"%s\"}", role, password);
+        securityToken = given()
                 .contentType("application/json")
-                .accept(ContentType.JSON)
-                .when()                
-                .get("/Person/getAll").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("firstName", contains(p1.getFirstName()));
+                .body(json)
+                //.when().post("/api/login")
+                .when().post("/login")
+                .then()
+                .extract().path("token");
+        //System.out.println("TOKEN ---> " + securityToken);
     }
 
+    private void logOut() {
+        securityToken = null;
+    }
 
     @Test
-    public void deletePerson() throws Exception{
-    
-     given()
-                .contentType("application/json")
-                .accept(ContentType.JSON)
-                .when()
-                .delete("/Person/delete/" + p1.getId()).then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode());
+    public void serverIsRunning() {
+        given().when().get("/info").then().statusCode(200);
     }
-    @Disabled
+    
     @Test
-    public void createPerson() throws Exception{
-      
-   
-        
-        given()
-                .contentType("application/json")
-                .accept(ContentType.JSON)
-                .when()
-                .body(payload)
-                .post("/Person/add/").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .extract()
-                .response();
+    public void getUsers(){
+    
+            RestAssured.baseURI = "/User/getALL";
+            given().urlEncodingEnabled(true)
+            .param("username", "user")
+            .param("password", "test")
+            .header("Accept", ContentType.JSON.getAcceptHeader())
+            .post("/login")
+            .then().statusCode(200);
+    }
+
+
     
     }
-    
+  
 
-}

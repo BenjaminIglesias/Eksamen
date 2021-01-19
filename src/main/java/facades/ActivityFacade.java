@@ -13,6 +13,7 @@ import dto.CombinedActivityDTO;
 import entities.Activity;
 import entities.CityInfo;
 import entities.User;
+import errorhandling.API_Exception;
 import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -103,5 +104,27 @@ public class ActivityFacade {
           }
     
     }
-    
-}
+     public String editActivity(long id, Activity activity) throws API_Exception{
+       EntityManager em = emf.createEntityManager();
+       
+       try {
+            em.getTransaction().begin();
+            
+           Activity a = em.find(Activity.class, id);
+           a.setComment(activity.getComment());
+           a.setDistance(activity.getDistance());
+           a.setDuration(activity.getDuration());
+           a.setExerciseType(activity.getExerciseType());
+             em.getTransaction().commit();
+       } catch (Exception e){
+           
+           throw new API_Exception(e.getMessage());
+           
+       } finally {
+           em.close();
+       }
+       
+       return "complete";
+   }
+     }
+

@@ -27,7 +27,7 @@ public class UserInfo implements Serializable {
     private String name;
     private int age;
     private double weight;
-     @OneToOne(mappedBy = "UserInfo")
+     @OneToOne(mappedBy = "UserInfo", cascade = CascadeType.ALL)
      User user; 
 
     public void setUser(User user) {

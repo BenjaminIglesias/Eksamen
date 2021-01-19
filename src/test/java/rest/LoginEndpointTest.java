@@ -21,6 +21,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
+
 
 //Disabled
 public class LoginEndpointTest {
@@ -220,5 +224,20 @@ public class LoginEndpointTest {
                 .body("code", equalTo(403))
                 .body("message", equalTo("Not authenticated - do login"));
     }
+    @Disabled
+    @Test
+    public void addActivity(){
+    String payload = "{\n\"exerciseType\": \"yoga\",\n\"duration\": 30,\n\"distance\": 30,\n\"comment\": \"god dag\"\n\n}";
+            login("user", "test");
+        given()
+            .contentType(ContentType.JSON)
+           .header("x-access-token", securityToken)
+            .body(payload)
+            .post("/Activity/add/Roskilde/user")
+            .then()
+            .statusCode(200)
+            .extract()
+            .response();
 
+}
 }

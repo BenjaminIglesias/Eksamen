@@ -14,6 +14,7 @@ import java.time.LocalTime;
  * @author Benjamin
  */
 public class ActivityDTO {
+    private long id;
     private LocalDate localDate;
     private String exerciseType;
     private LocalTime timeOfDay;
@@ -30,6 +31,7 @@ public class ActivityDTO {
         this.comment = activity.getComment();
         this.cityInfo = new CityInfoDTO(activity.getCityInfo());
         this.weatherInfo = new WeatherInfoDTO(activity.getWeatherInfo());
+        this.id = activity.getId();
     }
 
     public LocalDate getLocalDate() {

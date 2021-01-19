@@ -7,6 +7,7 @@ package entities;
 
 import dto.WeatherInfoDTO;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +29,7 @@ public class WeatherInfo implements Serializable {
     private String skyText;
     private String humidity;
     private String windText;
-    @OneToOne(mappedBy = "weatherInfo")
+    @OneToOne(mappedBy = "weatherInfo", cascade = CascadeType.ALL)
     private Activity activity;
 
     public WeatherInfo() {

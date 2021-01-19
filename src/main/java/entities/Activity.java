@@ -19,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,6 +29,7 @@ import javax.persistence.TemporalType;
  * @author Benjamin
  */
 @Entity
+@NamedQuery(name = "Activity.deleteAllRows", query = "DELETE from Activity")
 public class Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +43,7 @@ public class Activity implements Serializable {
     private double distance;
     private String comment;
     
-     @ManyToOne()
+     @ManyToOne(cascade = CascadeType.ALL)
      User user; 
      
      @OneToOne(cascade = CascadeType.ALL)
@@ -107,6 +109,34 @@ public class Activity implements Serializable {
 
     public WeatherInfo getWeatherInfo() {
         return weatherInfo;
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public void setExerciseType(String exerciseType) {
+        this.exerciseType = exerciseType;
+    }
+
+    public void setTimeOfDay(LocalTime timeOfDay) {
+        this.timeOfDay = timeOfDay;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setWeatherInfo(WeatherInfo weatherInfo) {
+        this.weatherInfo = weatherInfo;
     }
 
    
