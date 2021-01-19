@@ -13,6 +13,7 @@ import errorhandling.ErrorRetrieving;
 import facades.ActivityFacade;
 
 import facades.UserFacade;
+import java.io.IOException;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
@@ -21,6 +22,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.json.JSONException;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 
@@ -58,5 +60,15 @@ public class UserRessource {
         return  "{\"msg\": \"Bruger oprettet: " + u.getUserName() + "\"}";
 }
 
+   @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("fillDB")
+    public String fillDB() throws ErrorRetrieving, JSONException, IOException {
+      
+      return GSON.toJson( userFacade.fillDB());    
+      
+      
+    }
 
+   
 }
